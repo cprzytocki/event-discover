@@ -1,23 +1,23 @@
+"use client";
+import useSetParams from "@/hooks/useSetParams";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-interface SearchSectionProps {
-  searchParams: {
-    startDate: string;
-    endDate: string;
-    location: string;
-  };
-  setSearchParams: (searchParams: { startDate: string; endDate: string; location: string }) => void;
-  handleSearch: () => void;
+enum SearchParams {
+  StartDate = "startDate",
+  EndDate = "endDate",
+  Location = "location",
 }
 
-export default function SearchSection({
-  searchParams,
-  setSearchParams,
-  handleSearch,
-}: SearchSectionProps) {
+export default function SearchSection() {
+  const [searchParams, setSearchParams] = useSetParams();
+  const startDate =
+    searchParams.get(SearchParams.StartDate) ?? new Date().toISOString().split("T")[0];
+  const endDate = searchParams.get("endDate") ?? "";
+  const location = searchParams.get("location") ?? "";
+
   return (
     <Card>
       <CardContent className="grid md:grid-cols-3 gap-4">
@@ -26,12 +26,9 @@ export default function SearchSection({
           <Input
             id="startDate"
             type="date"
-            value={searchParams.startDate}
+            value={startDate}
             onChange={(e) =>
-              setSearchParams({
-                ...searchParams,
-                startDate: e.target.value,
-              })
+              setSearchParams([{ name: SearchParams.StartDate, value: e.target.value }])
             }
           />
         </div>
@@ -40,12 +37,9 @@ export default function SearchSection({
           <Input
             id="endDate"
             type="date"
-            value={searchParams.endDate}
+            value={endDate}
             onChange={(e) =>
-              setSearchParams({
-                ...searchParams,
-                endDate: e.target.value,
-              })
+              setSearchParams([{ name: SearchParams.EndDate, value: e.target.value }])
             }
           />
         </div>
@@ -54,18 +48,15 @@ export default function SearchSection({
           <Input
             id="location"
             type="text"
-            value={searchParams.location}
+            value={location}
             onChange={(e) =>
-              setSearchParams({
-                ...searchParams,
-                location: e.target.value,
-              })
+              setSearchParams([{ name: SearchParams.Location, value: e.target.value }])
             }
           />
         </div>
       </CardContent>
       <CardFooter>
-        <Button onClick={handleSearch}>Search</Button>
+        <Button onClick={() => {}}>Search</Button>
       </CardFooter>
     </Card>
   );
