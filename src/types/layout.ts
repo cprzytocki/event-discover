@@ -1,4 +1,4 @@
 export enum Layout {
-    GRID = "grid",
-    LIST = "list",
+  GRID = "grid",
+  LIST = "list",
 }

@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import TableView from "../components/TableView"
-import GridView from "../components/GridView"
-import ViewToggle from "../components/ViewToggle"
-import SearchSection from "../components/SearchSection"
-import { Layout } from "@/types/layout"
+import { useState } from "react";
+import TableView from "../components/TableView";
+import GridView from "../components/GridView";
+import ViewToggle from "../components/ViewToggle";
+import SearchSection from "../components/SearchSection";
+import { Layout } from "@/types/layout";
 
 export default function Home() {
   const [searchParams, setSearchParams] = useState({
     startDate: "",
     endDate: "",
     location: "",
-  })
+  });
   const [events, setEvents] = useState([
     {
       id: 1,
@@ -56,9 +56,9 @@ export default function Home() {
       time: "8:00 PM",
       location: "O2 Arena, London",
     },
-  ])
-  const [layout, setLayout] = useState(Layout.GRID)
-  const handleSearch = () => {}
+  ]);
+  const [layout, setLayout] = useState(Layout.GRID);
+  const handleSearch = () => {};
 
   return (
     <section className="w-full py-12">
@@ -68,18 +68,17 @@ export default function Home() {
             <h1 className="text-2xl font-bold tracking-tight">Event Discover</h1>
             <p className="text-muted-foreground">Find the best events near you.</p>
           </div>
-          <ViewToggle layout={layout} setLayout={setLayout}/>
+          <ViewToggle layout={layout} setLayout={setLayout} />
         </div>
-        <SearchSection searchParams={searchParams} setSearchParams={setSearchParams} handleSearch={handleSearch}/>
+        <SearchSection
+          searchParams={searchParams}
+          setSearchParams={setSearchParams}
+          handleSearch={handleSearch}
+        />
         <div className="grid gap-8">
-          {layout === Layout.GRID ? (
-            <GridView events={events} />
-          ) : (
-           <TableView events={events}/>
-          )}
+          {layout === Layout.GRID ? <GridView events={events} /> : <TableView events={events} />}
         </div>
       </div>
     </section>
-  )
+  );
 }
-  
