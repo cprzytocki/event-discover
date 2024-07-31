@@ -5,10 +5,10 @@ import { getEvents } from "@/actions/getEvents";
 import { Suspense } from "react";
 
 export default async function Home({ searchParams }: { searchParams: Record<string, string> }) {
-  console.log(searchParams);
+  const { startDate, endDate, location } = searchParams;
 
-  const eventsTest = await getEvents();
-  const events = eventsTest._embedded.events;
+  const eventsTest = await getEvents(startDate, endDate, location);
+  const events = eventsTest?._embedded?.events;
 
   return (
     <section className="w-full py-12">
@@ -22,7 +22,13 @@ export default async function Home({ searchParams }: { searchParams: Record<stri
         <Suspense fallback={<div>Loading...</div>}>
           <SearchSection />
         </Suspense>
-        <Events events={events} />
+        {events ? (
+          <Events events={events} />
+        ) : (
+          <div>
+            <pre>{JSON.stringify(eventsTest, null, 2)}</pre>
+          </div>
+        )}
       </div>
     </section>
   );
