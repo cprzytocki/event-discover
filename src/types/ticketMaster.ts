@@ -20,8 +20,8 @@ interface Sales {
 
 interface StartDate {
   localDate: string;
-  localTime: string;
-  dateTime: string;
+  localTime?: string;
+  dateTime?: string;
   dateTBD: boolean;
   dateTBA: boolean;
   timeTBA: boolean;
@@ -188,7 +188,7 @@ interface Embedded {
   attractions: object[]; // Assuming attractions contains a list of objects
 }
 
-export interface Event {
+export interface ApiEvent {
   name: string;
   type: string;
   id: string;
@@ -226,8 +226,8 @@ interface Page {
   number: number;
 }
 
-export interface EventsResponse {
-  _embedded: { events: Event[] };
+export interface EventsApiResponse {
+  _embedded: { events: ApiEvent[] };
   _links: PaginationLinks;
   page: Page;
 }

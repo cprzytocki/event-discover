@@ -6,8 +6,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import Event from "@/types/event";
 
-export default function TableView({ events }: { events: any[] }) {
+export default function TableView({ events }: { events: Event[] }) {
   return (
     <Table>
       <TableHeader>
@@ -22,19 +23,8 @@ export default function TableView({ events }: { events: any[] }) {
         {events.map((event) => (
           <TableRow key={event.id}>
             <TableCell className="font-medium">{event.name}</TableCell>
-            <TableCell>
-              {new Date(event.date).toLocaleDateString("en-US", {
-                weekday: "short",
-                month: "short",
-                day: "numeric",
-              })}
-            </TableCell>
-            <TableCell>
-              {new Date(event.date).toLocaleTimeString("en-US", {
-                hour: "numeric",
-                minute: "numeric",
-              })}
-            </TableCell>
+            <TableCell>{event.date}</TableCell>
+            <TableCell>{event.time}</TableCell>
             <TableCell>{event.location}</TableCell>
           </TableRow>
         ))}
