@@ -11,15 +11,30 @@ enum SearchParams {
   Location = "location",
 }
 
+function formatToISO(dateString: string, time = "") {
+  if (!dateString) return "";
+  const date = new Date(`${dateString} ${time}`);
+  return date.toISOString().replace(".000Z", "Z");
+}
+
+function formatToDate(isoString: string | null) {
+  if (!isoString) return "";
+  const date = new Date(isoString);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
+  const day = String(date.getDate()).padStart(2, "0"); // padStart ensures 2 digits
+
+  return `${year}-${month}-${day}`;
+}
+
 export default function SearchSection() {
   const [searchParams, setSearchParams] = useSetParams();
-  const startDate =
-    searchParams.get(SearchParams.StartDate) ?? new Date().toISOString().split("T")[0];
-  const endDate = searchParams.get("endDate") ?? "";
-  const location = searchParams.get("location") ?? "";
+  const startDate = formatToDate(searchParams.get(SearchParams.StartDate));
+  const endDate = formatToDate(searchParams.get(SearchParams.EndDate));
+  const location = searchParams.get(SearchParams.Location) ?? "";
 
   return (
-    <Card>
+    <Card className="pt-4">
       <CardContent className="grid md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="startDate">Start Date</Label>
@@ -27,9 +42,11 @@ export default function SearchSection() {
             id="startDate"
             type="date"
             value={startDate}
-            onChange={(e) =>
-              setSearchParams([{ name: SearchParams.StartDate, value: e.target.value }])
-            }
+            onChange={(e) => {
+              setSearchParams([
+                { name: SearchParams.StartDate, value: formatToISO(e.target.value, "00:00:00") },
+              ]);
+            }}
           />
         </div>
         <div className="space-y-2">
@@ -38,9 +55,11 @@ export default function SearchSection() {
             id="endDate"
             type="date"
             value={endDate}
-            onChange={(e) =>
-              setSearchParams([{ name: SearchParams.EndDate, value: e.target.value }])
-            }
+            onChange={(e) => {
+              setSearchParams([
+                { name: SearchParams.EndDate, value: formatToISO(e.target.value, "23:59:59") },
+              ]);
+            }}
           />
         </div>
         <div className="space-y-2">
