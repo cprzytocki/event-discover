@@ -2,6 +2,7 @@
 import SearchSection from "@/components/SearchSection";
 import Events from "@/components/Events/Events";
 import { getEvents } from "@/actions/getEvents";
+import { Suspense } from "react";
 
 export default async function Home({ searchParams }: { searchParams: Record<string, string> }) {
   console.log(searchParams);
@@ -18,7 +19,9 @@ export default async function Home({ searchParams }: { searchParams: Record<stri
             <p className="text-muted-foreground">Find the best events near you.</p>
           </div>
         </div>
-        <SearchSection />
+        <Suspense fallback={<div>Loading...</div>}>
+          <SearchSection />
+        </Suspense>
         <Events events={events} />
       </div>
     </section>
