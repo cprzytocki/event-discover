@@ -26,13 +26,9 @@ export default function useSetParams(): [
   );
 
   function setSearchParams(params: { name: string; value: string }[]): void {
-    router.push(
-      pathname + "?" + createQueryString(params),
-
-      {
-        scroll: false,
-      },
-    );
+    router.push(pathname + "?" + createQueryString(params), {
+      scroll: false,
+    });
   }
 
   return [searchParams, setSearchParams];
