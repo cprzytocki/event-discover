@@ -11,7 +11,10 @@ export default function GridView({ events }: GridViewProps) {
     <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
       {events.map((event) => {
         return (
-          <div key={event.id} className="grid gap-4 border rounded-lg overflow-hidden">
+          <div
+            key={event.id}
+            className="bg-primary-foreground grid gap-4 border rounded-lg overflow-hidden"
+          >
             <Image
               src={event.imageUrl}
               alt={event.name}

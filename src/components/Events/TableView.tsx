@@ -10,8 +10,8 @@ import Event from "@/types/event";
 
 export default function TableView({ events }: { events: Event[] }) {
   return (
-    <Table>
-      <TableHeader>
+    <Table className="bg-primary-foreground">
+      <TableHeader className="bg-secondary">
         <TableRow>
           <TableHead>Event</TableHead>
           <TableHead>Date</TableHead>

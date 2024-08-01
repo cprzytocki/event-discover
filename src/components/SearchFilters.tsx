@@ -1,6 +1,6 @@
 "use client";
 import useSetParams from "@/hooks/useSetParams";
-import { Card, CardContent, CardFooter } from "./ui/card";
+import { Card, CardContent } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { SearchParams } from "@/types/searchParams";
@@ -22,7 +22,7 @@ function formatToDate(isoString: string | null) {
   return `${year}-${month}-${day}`;
 }
 
-export default function SearchSection() {
+export default function SearchFilters() {
   const [searchParams, setSearchParams] = useSetParams();
   const startDate = formatToDate(searchParams.get(SearchParams.StartDate));
   const endDate = formatToDate(searchParams.get(SearchParams.EndDate));
@@ -32,20 +32,20 @@ export default function SearchSection() {
     setSearchParams([
       { name: SearchParams.StartDate, value: formatToISO(e.target.value, "00:00:00") },
     ]);
-  }, 250);
+  });
 
   const handleEndDateChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchParams([
       { name: SearchParams.EndDate, value: formatToISO(e.target.value, "23:59:59") },
     ]);
-  }, 250);
+  });
 
   const handleCityChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchParams([{ name: SearchParams.City, value: e.target.value.trim() }]);
-  }, 250);
+  });
 
   return (
-    <Card className="pt-4">
+    <Card className="pt-4 bg-primary-foreground">
       <CardContent className="grid md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="startDate">Start Date</Label>
@@ -54,6 +54,7 @@ export default function SearchSection() {
             type="date"
             defaultValue={startDate}
             onChange={handleStartDateChange}
+            className="text-primary"
           />
         </div>
         <div className="space-y-2">
@@ -65,7 +66,6 @@ export default function SearchSection() {
           <Input id="city" type="text" defaultValue={city} onChange={handleCityChange} />
         </div>
       </CardContent>
-      <CardFooter />
     </Card>
   );
 }

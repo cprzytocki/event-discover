@@ -1,5 +1,5 @@
 "use server";
-import SearchSection from "@/components/SearchSection";
+import SearchFilters from "@/components/SearchFilters";
 import Events from "@/components/Events/Events";
 import { getEvents } from "@/actions/getEvents";
 import { Suspense } from "react";
@@ -27,7 +27,7 @@ export default async function Home({ searchParams }: { searchParams: Record<stri
           </div>
         </div>
         <Suspense fallback={<div>Loading...</div>}>
-          <SearchSection />
+          <SearchFilters />
         </Suspense>
         {error ? (
           <div>

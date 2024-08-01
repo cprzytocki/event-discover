@@ -10,7 +10,7 @@ export default function NoResults() {
           No Events Found
         </h1>
         <p className="mt-4 text-muted-foreground">
-          Try adjusting your date filters or city selection to find upcoming events.
+          Try adjusting your date or city filters to find more events.
         </p>
       </div>
     </div>

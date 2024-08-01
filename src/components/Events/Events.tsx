@@ -3,23 +3,23 @@ import { ApiEvent } from "@/types/ticketMaster";
 import { useState } from "react";
 import GridView from "./GridView";
 import { Layout } from "@/types/layout";
-import ViewToggle from "./ViewToggle";
+import ViewToggle from "../ViewToggle";
 import TableView from "./TableView";
 import Event from "@/types/event";
 
 export default function Events({ events }: { events: ApiEvent[] }) {
   const [layout, setLayout] = useState(Layout.GRID);
 
-  const dateFormat = {
+  const dateFormat: Intl.DateTimeFormatOptions = {
     weekday: "short",
     month: "short",
     day: "numeric",
-  } as const;
+  };
 
-  const timeFormat = {
+  const timeFormat: Intl.DateTimeFormatOptions = {
     hour: "numeric",
     minute: "numeric",
-  } as const;
+  };
 
   const aggregatedEvents: Event[] = events.map((event) => {
     let formattedDate, formattedTime;
@@ -44,6 +44,7 @@ export default function Events({ events }: { events: ApiEvent[] }) {
       imageUrl: event.images[0]?.url ?? "/placeholder.svg",
       venue: event._embedded.venues[0]?.name,
       time: formattedTime,
+      // country is used if city is not available
       location: event._embedded.venues[0]?.city?.name ?? event._embedded.venues[0].country.name,
     };
   });
