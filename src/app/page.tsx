@@ -8,7 +8,11 @@ import { Layout } from "@/types/layout";
 import TableView from "@/components/TableView";
 import GridView from "@/components/GridView";
 
-export default async function Home({ searchParams }: { searchParams: Record<string, string> }) {
+export interface PageProps {
+  searchParams: Record<string, string>;
+}
+
+export default async function Home({ searchParams }: PageProps) {
   const { startDate, endDate, city, layout } = searchParams;
   let error;
 
@@ -26,7 +30,9 @@ export default async function Home({ searchParams }: { searchParams: Record<stri
       <div className="container grid gap-8 px-4 md:px-6">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
           <div className="grid gap-1">
-            <h1 className="text-2xl font-bold tracking-tight">Event Discover</h1>
+            <h1 className="text-2xl font-bold tracking-tight" data-testid="page-header">
+              Event Discover
+            </h1>
             <p className="text-muted-foreground">Find the best events near you.</p>
           </div>
         </div>
