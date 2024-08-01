@@ -30,13 +30,6 @@ export default function SearchFilters() {
     setSearchParams([{ name: SearchParams.City, value: e.target.value.trim() }]);
   });
 
-  const handleDateChange = debounce((date?: DateRange) => {
-    setSearchParams([
-      { name: SearchParams.StartDate, value: formatToISO(date?.from, "start") },
-      { name: SearchParams.EndDate, value: formatToISO(date?.to, "end") },
-    ]);
-  });
-
   const defaultDate = startDate
     ? { from: new Date(startDate), to: endDate ? new Date(endDate) : undefined }
     : undefined;
@@ -49,7 +42,12 @@ export default function SearchFilters() {
           <DatePickerWithRange
             id="datePicker"
             defaultValue={defaultDate}
-            onChange={handleDateChange}
+            onChange={(date?: DateRange) => {
+              setSearchParams([
+                { name: SearchParams.StartDate, value: formatToISO(date?.from, "start") },
+                { name: SearchParams.EndDate, value: formatToISO(date?.to, "end") },
+              ]);
+            }}
           />
         </div>
         <div className="space-y-2">

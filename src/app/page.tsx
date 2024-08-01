@@ -38,7 +38,6 @@ export default async function Home({ searchParams }: { searchParams: Record<stri
             <pre>{error}</pre>
           </div>
         )}
-
         {aggregatedEvents?.length ? (
           <div className="grid gap-8">
             {layout === Layout.LIST ? (
