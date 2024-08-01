@@ -54,12 +54,18 @@ export default function SearchFilters() {
             type="date"
             defaultValue={startDate}
             onChange={handleStartDateChange}
-            className="text-primary"
+            className="dark:[color-scheme:dark]"
           />
         </div>
         <div className="space-y-2">
           <Label htmlFor="endDate">End Date</Label>
-          <Input id="endDate" type="date" defaultValue={endDate} onChange={handleEndDateChange} />
+          <Input
+            id="endDate"
+            type="date"
+            defaultValue={endDate}
+            onChange={handleEndDateChange}
+            className="dark:[color-scheme:dark]"
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="city">City</Label>
