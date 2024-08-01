@@ -1,19 +1,14 @@
 "use client";
 import useSetParams from "@/hooks/useSetParams";
-import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
-
-enum SearchParams {
-  StartDate = "startDate",
-  EndDate = "endDate",
-  Location = "location",
-}
+import { SearchParams } from "@/types/searchParams";
 
 function formatToISO(dateString: string, time = "") {
   if (!dateString) return "";
   const date = new Date(`${dateString} ${time}`);
+  console.log(date);
   return date.toISOString().replace(".000Z", "Z");
 }
 
@@ -31,7 +26,7 @@ export default function SearchSection() {
   const [searchParams, setSearchParams] = useSetParams();
   const startDate = formatToDate(searchParams.get(SearchParams.StartDate));
   const endDate = formatToDate(searchParams.get(SearchParams.EndDate));
-  const location = searchParams.get(SearchParams.Location) ?? "";
+  const city = searchParams.get(SearchParams.City) ?? "";
 
   return (
     <Card className="pt-4">
@@ -41,7 +36,7 @@ export default function SearchSection() {
           <Input
             id="startDate"
             type="date"
-            value={startDate}
+            defaultValue={startDate}
             onChange={(e) => {
               setSearchParams([
                 { name: SearchParams.StartDate, value: formatToISO(e.target.value, "00:00:00") },
@@ -54,7 +49,7 @@ export default function SearchSection() {
           <Input
             id="endDate"
             type="date"
-            value={endDate}
+            defaultValue={endDate}
             onChange={(e) => {
               setSearchParams([
                 { name: SearchParams.EndDate, value: formatToISO(e.target.value, "23:59:59") },
@@ -63,20 +58,19 @@ export default function SearchSection() {
           />
         </div>
         <div className="space-y-2">
-          <Label htmlFor="location">Location</Label>
+          <Label htmlFor="city">City</Label>
           <Input
-            id="location"
+            id="city"
             type="text"
-            value={location}
+            defaultValue={city}
             onChange={(e) =>
-              setSearchParams([{ name: SearchParams.Location, value: e.target.value }])
+              setSearchParams([{ name: SearchParams.City, value: e.target.value.trim() }])
             }
+            placeholder="Enter city name"
           />
         </div>
       </CardContent>
-      <CardFooter>
-        <Button onClick={() => {}}>Search</Button>
-      </CardFooter>
+      <CardFooter></CardFooter>
     </Card>
   );
 }

@@ -5,9 +5,9 @@ import { getEvents } from "@/actions/getEvents";
 import { Suspense } from "react";
 
 export default async function Home({ searchParams }: { searchParams: Record<string, string> }) {
-  const { startDate, endDate, location } = searchParams;
+  const { startDate, endDate, city } = searchParams;
 
-  const eventsTest = await getEvents(startDate, endDate, location);
+  const eventsTest = await getEvents(startDate, endDate, city);
   const events = eventsTest?._embedded?.events;
 
   return (

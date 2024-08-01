@@ -11,15 +11,18 @@ export default function Events({ events }: { events: ApiEvent[] }) {
   const [layout, setLayout] = useState(Layout.GRID);
 
   const aggregatedEvents: Event[] = events.map((event) => {
-    let formattedDate;
+    let formattedDate, formattedTime;
 
-    // A time is not available for all events
+    // A time is not available for all events returned from the API
     if (event.dates.start.dateTime) {
       const date = new Date(event.dates.start.dateTime);
       formattedDate = date.toLocaleDateString(undefined, {
         weekday: "short",
         month: "short",
         day: "numeric",
+      });
+
+      formattedTime = date.toLocaleTimeString(undefined, {
         hour: "numeric",
         minute: "numeric",
       });
@@ -29,16 +32,18 @@ export default function Events({ events }: { events: ApiEvent[] }) {
         month: "short",
         day: "numeric",
       });
+
+      formattedTime = event.dates.start.localTime ?? "N/A";
     }
 
     return {
       id: event.id,
       name: event.name,
       date: formattedDate,
-      imageUrl: event.images[0]?.url || "/placeholder.svg",
-      venue: event._embedded.venues[0].name,
-      time: event.dates.start.localTime || "N/A",
-      location: event._embedded.venues[0].city?.name ?? event._embedded.venues[0].country.name,
+      imageUrl: event.images[0]?.url ?? "/placeholder.svg",
+      venue: event._embedded.venues[0]?.name,
+      time: formattedTime,
+      location: event._embedded.venues[0]?.city?.name ?? event._embedded.venues[0].country.name,
     };
   });
 
@@ -53,37 +58,3 @@ export default function Events({ events }: { events: ApiEvent[] }) {
     </div>
   );
 }
-
-// let formattedDate, formattedTime;
-// if (!event.dates.start.dateTime) {
-//   formattedDate = event.dates.start.localDate
-//     ? new Date(event.dates.start.localDate).toLocaleDateString(undefined, {
-//         weekday: "short",
-//         month: "short",
-//         day: "numeric",
-//       })
-//     : "N/A";
-
-//   formattedTime = event.dates.start.localTime
-//     ? new Date(event.dates.start.localTime).toLocaleTimeString(undefined, {
-//         hour: "numeric",
-//         minute: "numeric",
-//       })
-//     : "";
-// } else {
-//   const date = new Date(event.dates.start.dateTime);
-//   formattedDate = date.toLocaleDateString(undefined, {
-//     weekday: "short",
-//     month: "short",
-//     day: "numeric",
-//   });
-
-//   formattedTime = date.toLocaleTimeString(undefined, {
-//     hour: "numeric",
-//     minute: "numeric",
-//   });
-// }
-
-// const venueName = event._embedded.venues[0].name;
-// const venueLocation =
-//   event._embedded.venues[0].city?.name || event._embedded.venues[0].country.name;

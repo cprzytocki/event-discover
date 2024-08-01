@@ -24,6 +24,7 @@ export default function GridView({ events }: GridViewProps) {
               <div className="flex items-center gap-2 text-muted-foreground">
                 <CalendarIcon className="w-4 h-4" />
                 <span>{event.date}</span>
+                <span>{event.time}</span>
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
                 <MapPinIcon className="w-4 h-4" />
