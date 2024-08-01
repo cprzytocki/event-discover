@@ -1,4 +1,6 @@
+import { type ApiEvent } from "@/types/ticketMaster";
 import { type ClassValue, clsx } from "clsx";
+import type Event from "@/types/event";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -15,4 +17,53 @@ export function debounce<T extends (...args: any[]) => void>(
     clearTimeout(timeout);
     timeout = setTimeout(() => func(...args), delay);
   };
+}
+
+export function aggregateEvents(events: ApiEvent[]): Event[] {
+  const dateFormat: Intl.DateTimeFormatOptions = {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  };
+
+  const timeFormat: Intl.DateTimeFormatOptions = {
+    hour: "numeric",
+    minute: "numeric",
+  };
+
+  const aggregatedEvents: Event[] = events.map((event) => {
+    let formattedDate, formattedTime;
+
+    // A time is not available for all events returned from the API
+    if (event.dates.start.dateTime) {
+      const date = new Date(event.dates.start.dateTime);
+      // need to specify the locale to match SSR and client side hydration
+      formattedDate = date.toLocaleDateString("en-us", dateFormat);
+      formattedTime = date.toLocaleTimeString("en-us", timeFormat);
+    } else {
+      formattedDate = new Date(event.dates.start.localDate).toLocaleDateString("en-us", dateFormat);
+      formattedTime = event.dates.start.localTime ?? "N/A";
+    }
+
+    // venue is not always provided
+    const venuesExist = Boolean(event._embedded?.venues?.length);
+    const venue = venuesExist ? event._embedded.venues[0].name : "N/A";
+
+    // check if city or country is available
+    const location = venuesExist
+      ? (event._embedded.venues[0].city?.name ?? event._embedded.venues[0].country?.name ?? "N/A")
+      : "N/A";
+
+    return {
+      id: event.id,
+      name: event.name,
+      date: formattedDate,
+      imageUrl: event.images[0]?.url ?? "/placeholder.svg",
+      venue: venue,
+      time: formattedTime,
+      location: location,
+    };
+  });
+
+  return aggregatedEvents;
 }

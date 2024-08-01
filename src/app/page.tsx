@@ -1,12 +1,15 @@
 "use server";
 import SearchFilters from "@/components/SearchFilters";
-import Events from "@/components/Events/Events";
 import { getEvents } from "@/actions/getEvents";
 import { Suspense } from "react";
 import NoResults from "@/components/NoResults";
+import { aggregateEvents } from "@/lib/utils";
+import { Layout } from "@/types/layout";
+import TableView from "@/components/TableView";
+import GridView from "@/components/GridView";
 
 export default async function Home({ searchParams }: { searchParams: Record<string, string> }) {
-  const { startDate, endDate, city } = searchParams;
+  const { startDate, endDate, city, layout } = searchParams;
   let error;
 
   const eventsRes = await getEvents(startDate, endDate, city).catch((err: Error) => {
@@ -16,9 +19,10 @@ export default async function Home({ searchParams }: { searchParams: Record<stri
   });
 
   const events = eventsRes?._embedded?.events;
+  const aggregatedEvents = events ? aggregateEvents(events) : null;
 
   return (
-    <section className="w-full py-12">
+    <section className="w-full py-12 flex justify-center ">
       <div className="container grid gap-8 px-4 md:px-6">
         <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8">
           <div className="grid gap-1">
@@ -29,12 +33,20 @@ export default async function Home({ searchParams }: { searchParams: Record<stri
         <Suspense fallback={<div>Loading...</div>}>
           <SearchFilters />
         </Suspense>
-        {error ? (
+        {error && (
           <div>
             <pre>{error}</pre>
           </div>
-        ) : events?.length ? (
-          <Events events={events} />
+        )}
+
+        {aggregatedEvents?.length ? (
+          <div className="grid gap-8">
+            {layout === Layout.LIST ? (
+              <TableView events={aggregatedEvents} />
+            ) : (
+              <GridView events={aggregatedEvents} />
+            )}
+          </div>
         ) : (
           <NoResults />
         )}

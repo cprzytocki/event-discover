@@ -7,6 +7,8 @@ import { SearchParams } from "@/types/searchParams";
 import { debounce } from "@/lib/utils";
 import { DatePickerWithRange } from "./ui/datepicker";
 import { DateRange } from "react-day-picker";
+import ViewToggle from "./ViewToggle";
+import { Layout } from "@/types/layout";
 
 function formatToISO(date?: Date, time?: "start" | "end") {
   if (!date) return "";
@@ -22,6 +24,7 @@ export default function SearchFilters() {
   const startDate = searchParams.get(SearchParams.StartDate);
   const endDate = searchParams.get(SearchParams.EndDate);
   const city = searchParams.get(SearchParams.City) ?? "";
+  const layout = (searchParams.get(SearchParams.Layout) as Layout) ?? Layout.GRID;
 
   const handleCityChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchParams([{ name: SearchParams.City, value: e.target.value.trim() }]);
@@ -39,8 +42,8 @@ export default function SearchFilters() {
     : undefined;
 
   return (
-    <Card className="p-0 max-w-[650px] border-0">
-      <CardContent className="grid md:grid-cols-2 gap-4 p-0">
+    <Card className="p-0 border-0">
+      <CardContent className="grid md:grid-cols-3 gap-4 p-0">
         <div className="space-y-2">
           <Label htmlFor="datePicker">Date Range</Label>
           <DatePickerWithRange
@@ -58,6 +61,12 @@ export default function SearchFilters() {
             onChange={handleCityChange}
             className="bg-primary-foreground"
             placeholder="Enter a city"
+          />
+        </div>
+        <div className="space-y-2 mt-auto ml-auto">
+          <ViewToggle
+            layout={layout}
+            setLayout={(layout) => setSearchParams([{ name: SearchParams.Layout, value: layout }])}
           />
         </div>
       </CardContent>
