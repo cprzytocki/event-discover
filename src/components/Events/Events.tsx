@@ -10,29 +10,30 @@ import Event from "@/types/event";
 export default function Events({ events }: { events: ApiEvent[] }) {
   const [layout, setLayout] = useState(Layout.GRID);
 
+  const dateFormat = {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  } as const;
+
+  const timeFormat = {
+    hour: "numeric",
+    minute: "numeric",
+  } as const;
+
   const aggregatedEvents: Event[] = events.map((event) => {
     let formattedDate, formattedTime;
 
     // A time is not available for all events returned from the API
     if (event.dates.start.dateTime) {
       const date = new Date(event.dates.start.dateTime);
-      formattedDate = date.toLocaleDateString(undefined, {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-      });
-
-      formattedTime = date.toLocaleTimeString(undefined, {
-        hour: "numeric",
-        minute: "numeric",
-      });
+      formattedDate = date.toLocaleDateString(undefined, dateFormat);
+      formattedTime = date.toLocaleTimeString(undefined, timeFormat);
     } else {
-      formattedDate = new Date(event.dates.start.localDate).toLocaleDateString(undefined, {
-        weekday: "short",
-        month: "short",
-        day: "numeric",
-      });
-
+      formattedDate = new Date(event.dates.start.localDate).toLocaleDateString(
+        undefined,
+        dateFormat,
+      );
       formattedTime = event.dates.start.localTime ?? "N/A";
     }
 

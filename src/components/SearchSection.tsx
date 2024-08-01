@@ -65,7 +65,7 @@ export default function SearchSection() {
           <Input id="city" type="text" defaultValue={city} onChange={handleCityChange} />
         </div>
       </CardContent>
-      <CardFooter></CardFooter>
+      <CardFooter />
     </Card>
   );
 }
