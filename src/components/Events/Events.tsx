@@ -56,7 +56,7 @@ export default function Events({ events }: { events: ApiEvent[] }) {
   });
 
   return (
-    <div className="grid gap-8">
+    <div className="grid gap-8 mt-6">
       <ViewToggle layout={layout} setLayout={setLayout} />
       {layout === Layout.GRID ? (
         <GridView events={aggregatedEvents} />

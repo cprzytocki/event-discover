@@ -39,8 +39,8 @@ export default function SearchFilters() {
     : undefined;
 
   return (
-    <Card className="pt-4">
-      <CardContent className="grid md:grid-cols-2 gap-4">
+    <Card className="p-0 max-w-[650px] border-0">
+      <CardContent className="grid md:grid-cols-2 gap-4 p-0">
         <div className="space-y-2">
           <Label htmlFor="datePicker">Date Range</Label>
           <DatePickerWithRange
@@ -57,6 +57,7 @@ export default function SearchFilters() {
             defaultValue={city}
             onChange={handleCityChange}
             className="bg-primary-foreground"
+            placeholder="Enter a city"
           />
         </div>
       </CardContent>
