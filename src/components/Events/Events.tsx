@@ -36,12 +36,12 @@ export default function Events({ events }: { events: ApiEvent[] }) {
     }
 
     // venue is not always provided
-    const venuesExist = !!event._embedded.venues?.length;
-    const venue = venuesExist ? event._embedded.venues[0]?.name : "N/A";
+    const venuesExist = Boolean(event._embedded?.venues?.length);
+    const venue = venuesExist ? event._embedded.venues[0].name : "N/A";
 
-    // country is used if city is not available
+    // check if city or country is available
     const location = venuesExist
-      ? (event._embedded.venues[0].city.name ?? event._embedded.venues[0].country.name)
+      ? (event._embedded.venues[0].city?.name ?? event._embedded.venues[0].country?.name ?? "N/A")
       : "N/A";
 
     return {

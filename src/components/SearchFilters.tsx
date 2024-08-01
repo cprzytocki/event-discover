@@ -5,71 +5,59 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { SearchParams } from "@/types/searchParams";
 import { debounce } from "@/lib/utils";
+import { DatePickerWithRange } from "./ui/datepicker";
+import { DateRange } from "react-day-picker";
 
-function formatToISO(dateString: string, time = "") {
-  if (!dateString) return "";
-  const date = new Date(`${dateString} ${time}`);
-  return date.toISOString().replace(".000Z", "Z");
-}
+function formatToISO(date?: Date, time?: "start" | "end") {
+  if (!date) return "";
+  const newDate = new Date(date);
+  if (time === "start") newDate.setHours(0, 0, 0);
+  if (time === "end") newDate.setHours(23, 59, 59);
 
-function formatToDate(isoString: string | null) {
-  if (!isoString) return "";
-  const date = new Date(isoString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-indexed
-  const day = String(date.getDate()).padStart(2, "0"); // padStart ensures 2 digits
-
-  return `${year}-${month}-${day}`;
+  return newDate.toISOString().replace(".000Z", "Z");
 }
 
 export default function SearchFilters() {
   const [searchParams, setSearchParams] = useSetParams();
-  const startDate = formatToDate(searchParams.get(SearchParams.StartDate));
-  const endDate = formatToDate(searchParams.get(SearchParams.EndDate));
+  const startDate = searchParams.get(SearchParams.StartDate);
+  const endDate = searchParams.get(SearchParams.EndDate);
   const city = searchParams.get(SearchParams.City) ?? "";
-
-  const handleStartDateChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchParams([
-      { name: SearchParams.StartDate, value: formatToISO(e.target.value, "00:00:00") },
-    ]);
-  });
-
-  const handleEndDateChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchParams([
-      { name: SearchParams.EndDate, value: formatToISO(e.target.value, "23:59:59") },
-    ]);
-  });
 
   const handleCityChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchParams([{ name: SearchParams.City, value: e.target.value.trim() }]);
   });
 
+  const handleDateChange = debounce((date?: DateRange) => {
+    setSearchParams([
+      { name: SearchParams.StartDate, value: formatToISO(date?.from, "start") },
+      { name: SearchParams.EndDate, value: formatToISO(date?.to, "end") },
+    ]);
+  });
+
+  const defaultDate = startDate
+    ? { from: new Date(startDate), to: endDate ? new Date(endDate) : undefined }
+    : undefined;
+
   return (
-    <Card className="pt-4 bg-primary-foreground">
-      <CardContent className="grid md:grid-cols-3 gap-4">
+    <Card className="pt-4">
+      <CardContent className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="startDate">Start Date</Label>
-          <Input
-            id="startDate"
-            type="date"
-            defaultValue={startDate}
-            onChange={handleStartDateChange}
-            className="dark:[color-scheme:dark]"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="endDate">End Date</Label>
-          <Input
-            id="endDate"
-            type="date"
-            defaultValue={endDate}
-            onChange={handleEndDateChange}
-            className="dark:[color-scheme:dark]"
+          <Label htmlFor="datePicker">Date Range</Label>
+          <DatePickerWithRange
+            id="datePicker"
+            defaultValue={defaultDate}
+            onChange={handleDateChange}
           />
         </div>
         <div className="space-y-2">
           <Label htmlFor="city">City</Label>
-          <Input id="city" type="text" defaultValue={city} onChange={handleCityChange} />
+          <Input
+            id="city"
+            type="text"
+            defaultValue={city}
+            onChange={handleCityChange}
+            className="bg-primary-foreground"
+          />
         </div>
       </CardContent>
     </Card>
