@@ -3,12 +3,19 @@ import SearchSection from "@/components/SearchSection";
 import Events from "@/components/Events/Events";
 import { getEvents } from "@/actions/getEvents";
 import { Suspense } from "react";
+import NoResults from "@/components/NoResults";
 
 export default async function Home({ searchParams }: { searchParams: Record<string, string> }) {
   const { startDate, endDate, city } = searchParams;
+  let error;
 
-  const eventsTest = await getEvents(startDate, endDate, city);
-  const events = eventsTest?._embedded?.events;
+  const eventsRes = await getEvents(startDate, endDate, city).catch((err: Error) => {
+    console.error(err);
+    error = err.message;
+    return null;
+  });
+
+  const events = eventsRes?._embedded?.events;
 
   return (
     <section className="w-full py-12">
@@ -22,12 +29,14 @@ export default async function Home({ searchParams }: { searchParams: Record<stri
         <Suspense fallback={<div>Loading...</div>}>
           <SearchSection />
         </Suspense>
-        {events ? (
+        {error ? (
+          <div>
+            <pre>{error}</pre>
+          </div>
+        ) : events?.length ? (
           <Events events={events} />
         ) : (
-          <div>
-            <pre>{JSON.stringify(eventsTest, null, 2)}</pre>
-          </div>
+          <NoResults />
         )}
       </div>
     </section>

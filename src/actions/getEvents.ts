@@ -11,7 +11,10 @@ export async function getEvents(startDate: string, endDate: string, city: string
   console.log({ startQuery, endQuery, cityQuery });
   const endpoint = `https://app.ticketmaster.com/discovery/v2/events?countryCode=US&sort=date,asc&apikey=${API_KEY}`;
   const res = await fetch(endpoint + startQuery + endQuery + cityQuery);
-
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error(error);
+  }
   const data: Promise<EventsApiResponse> = res.json();
   return data;
 }

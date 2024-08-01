@@ -8,7 +8,6 @@ import { SearchParams } from "@/types/searchParams";
 function formatToISO(dateString: string, time = "") {
   if (!dateString) return "";
   const date = new Date(`${dateString} ${time}`);
-  console.log(date);
   return date.toISOString().replace(".000Z", "Z");
 }
 
