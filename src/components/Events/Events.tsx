@@ -37,15 +37,23 @@ export default function Events({ events }: { events: ApiEvent[] }) {
       formattedTime = event.dates.start.localTime ?? "N/A";
     }
 
+    // venue is not always provided
+    const venuesExist = !!event._embedded.venues?.length;
+    const venue = venuesExist ? event._embedded.venues[0]?.name : "N/A";
+
+    // country is used if city is not available
+    const location = venuesExist
+      ? (event._embedded.venues[0].city.name ?? event._embedded.venues[0].country.name)
+      : "N/A";
+
     return {
       id: event.id,
       name: event.name,
       date: formattedDate,
       imageUrl: event.images[0]?.url ?? "/placeholder.svg",
-      venue: event._embedded.venues[0]?.name,
+      venue: venue,
       time: formattedTime,
-      // country is used if city is not available
-      location: event._embedded.venues[0]?.city?.name ?? event._embedded.venues[0].country.name,
+      location: location,
     };
   });
 

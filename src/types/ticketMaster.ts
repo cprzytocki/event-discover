@@ -184,7 +184,7 @@ interface Links {
 }
 
 interface Embedded {
-  venues: Venue[]; // Assuming venues contains a list of objects
+  venues: Venue[];
   attractions: object[]; // Assuming attractions contains a list of objects
 }
 
