@@ -27,13 +27,11 @@ export default function Events({ events }: { events: ApiEvent[] }) {
     // A time is not available for all events returned from the API
     if (event.dates.start.dateTime) {
       const date = new Date(event.dates.start.dateTime);
-      formattedDate = date.toLocaleDateString(undefined, dateFormat);
-      formattedTime = date.toLocaleTimeString(undefined, timeFormat);
+      // need to specify the locale to match SSR and client side hydration
+      formattedDate = date.toLocaleDateString("en-us", dateFormat);
+      formattedTime = date.toLocaleTimeString("en-us", timeFormat);
     } else {
-      formattedDate = new Date(event.dates.start.localDate).toLocaleDateString(
-        undefined,
-        dateFormat,
-      );
+      formattedDate = new Date(event.dates.start.localDate).toLocaleDateString("en-us", dateFormat);
       formattedTime = event.dates.start.localTime ?? "N/A";
     }
 
