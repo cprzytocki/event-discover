@@ -4,6 +4,7 @@ import { Card, CardContent, CardFooter } from "./ui/card";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { SearchParams } from "@/types/searchParams";
+import { debounce } from "@/lib/utils";
 
 function formatToISO(dateString: string, time = "") {
   if (!dateString) return "";
@@ -27,6 +28,22 @@ export default function SearchSection() {
   const endDate = formatToDate(searchParams.get(SearchParams.EndDate));
   const city = searchParams.get(SearchParams.City) ?? "";
 
+  const handleStartDateChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams([
+      { name: SearchParams.StartDate, value: formatToISO(e.target.value, "00:00:00") },
+    ]);
+  }, 250);
+
+  const handleEndDateChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams([
+      { name: SearchParams.EndDate, value: formatToISO(e.target.value, "23:59:59") },
+    ]);
+  }, 250);
+
+  const handleCityChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchParams([{ name: SearchParams.City, value: e.target.value.trim() }]);
+  }, 250);
+
   return (
     <Card className="pt-4">
       <CardContent className="grid md:grid-cols-3 gap-4">
@@ -36,37 +53,16 @@ export default function SearchSection() {
             id="startDate"
             type="date"
             defaultValue={startDate}
-            onChange={(e) => {
-              setSearchParams([
-                { name: SearchParams.StartDate, value: formatToISO(e.target.value, "00:00:00") },
-              ]);
-            }}
+            onChange={handleStartDateChange}
           />
         </div>
         <div className="space-y-2">
           <Label htmlFor="endDate">End Date</Label>
-          <Input
-            id="endDate"
-            type="date"
-            defaultValue={endDate}
-            onChange={(e) => {
-              setSearchParams([
-                { name: SearchParams.EndDate, value: formatToISO(e.target.value, "23:59:59") },
-              ]);
-            }}
-          />
+          <Input id="endDate" type="date" defaultValue={endDate} onChange={handleEndDateChange} />
         </div>
         <div className="space-y-2">
           <Label htmlFor="city">City</Label>
-          <Input
-            id="city"
-            type="text"
-            defaultValue={city}
-            onChange={(e) =>
-              setSearchParams([{ name: SearchParams.City, value: e.target.value.trim() }])
-            }
-            placeholder="Enter city name"
-          />
+          <Input id="city" type="text" defaultValue={city} onChange={handleCityChange} />
         </div>
       </CardContent>
       <CardFooter></CardFooter>
