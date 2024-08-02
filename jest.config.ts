@@ -8,6 +8,12 @@ const createJestConfig = nextJest({
 
 // Add any custom config to be passed to Jest
 const config: Config = {
+  collectCoverageFrom: [
+    "src/**/*.(ts|tsx)", // Include all ts and tsx files in src
+    "!src/types/**.*", // Exclude types
+    "!src/components/ui/*", // Exclude component library files
+  ],
+
   coverageProvider: "v8",
   testEnvironment: "jsdom",
   testRegex: ".*\\.test\\.(ts|tsx)$",
