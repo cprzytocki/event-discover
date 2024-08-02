@@ -33,16 +33,20 @@ export function aggregateEvents(events: ApiEvent[]): Event[] {
 
   const aggregatedEvents: Event[] = events.map((event) => {
     let formattedDate, formattedTime;
+    const eventDateTime = event.dates.start.dateTime;
 
     // A time is not available for all events returned from the API
-    if (event.dates.start.dateTime) {
-      const date = new Date(event.dates.start.dateTime);
+    if (eventDateTime) {
+      const date = new Date(eventDateTime);
       // need to specify the locale to match SSR and client side hydration
       formattedDate = date.toLocaleDateString("en-us", dateFormat);
       formattedTime = date.toLocaleTimeString("en-us", timeFormat);
     } else {
-      formattedDate = new Date(event.dates.start.localDate).toLocaleDateString("en-us", dateFormat);
-      formattedTime = event.dates.start.localTime ?? "N/A";
+      formattedDate = new Date(event.dates.start.localDate + "T00:00:00").toLocaleDateString(
+        "en-us",
+        dateFormat,
+      );
+      formattedTime = "N/A";
     }
 
     // venue is not always provided
