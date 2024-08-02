@@ -3,10 +3,12 @@ import { type ClassValue, clsx } from "clsx";
 import type Event from "@/types/event";
 import { twMerge } from "tailwind-merge";
 
+// Used to merge Tailwind classes with clsx
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+// Debounce to limit number of function calls
 export function debounce<T extends (...args: any[]) => void>(
   func: T,
   delay: number = 250,
@@ -19,6 +21,7 @@ export function debounce<T extends (...args: any[]) => void>(
   };
 }
 
+//  Aggregate events from the Ticketmaster API into a more app friendly data structure
 export function aggregateEvents(events: ApiEvent[]): Event[] {
   const dateFormat: Intl.DateTimeFormatOptions = {
     weekday: "short",

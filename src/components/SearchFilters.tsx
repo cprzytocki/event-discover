@@ -10,27 +10,34 @@ import { DateRange } from "react-day-picker";
 import ViewToggle from "./ViewToggle";
 import { Layout } from "@/types/layout";
 
-function formatToISO(date?: Date, time?: "start" | "end") {
+// Convert a date to an API friendly format
+function formatToISO(date?: Date, time?: "start" | "end"): string {
   if (!date) return "";
   const newDate = new Date(date);
+
+  // Time is used to set the date start or end of the day for correct date filtering
   if (time === "start") newDate.setHours(0, 0, 0);
   if (time === "end") newDate.setHours(23, 59, 59);
 
+  // API requirement
   return newDate.toISOString().replace(".000Z", "Z");
 }
 
 export default function SearchFilters() {
   const [searchParams, setSearchParams] = useSetParams();
+  // Get the search params from the URL
   const startDate = searchParams.get(SearchParams.StartDate);
   const endDate = searchParams.get(SearchParams.EndDate);
   const city = searchParams.get(SearchParams.City) ?? "";
   const layout = (searchParams.get(SearchParams.Layout) as Layout) ?? Layout.GRID;
 
+  // Debounce city input to reduce api calls
   const handleCityChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchParams([{ name: SearchParams.City, value: e.target.value.trim() }]);
   });
 
-  const defaultDate = startDate
+  // Format date from URL to DateRange for the date picker element
+  const defaultDate: DateRange | undefined = startDate
     ? { from: new Date(startDate), to: endDate ? new Date(endDate) : undefined }
     : undefined;
 

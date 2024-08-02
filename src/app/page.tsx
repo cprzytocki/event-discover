@@ -17,7 +17,6 @@ export default async function Home({ searchParams }: PageProps) {
   let error;
 
   const eventsRes = await getEvents(startDate, endDate, city).catch((err: Error) => {
-    console.error(err);
     error = err.message;
     return null;
   });
