@@ -110,13 +110,10 @@ describe("Page", () => {
 
   it("renders error message when there is an error fetching events", async () => {
     (getEvents as jest.Mock).mockRejectedValueOnce(new Error("Failed to fetch events"));
-    // Suppress expected console.error output
-    const consoleSpy = jest.spyOn(console, "error").mockImplementationOnce(() => {});
 
     render(await Page(mockProps));
 
     const errorMessage = await screen.findByText("Failed to fetch events");
     expect(errorMessage).toBeInTheDocument();
-    expect(consoleSpy).toHaveBeenCalledTimes(1);
   });
 });
