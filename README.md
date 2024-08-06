@@ -4,6 +4,16 @@ This is a simple event discovery app that allows users to search for events by a
 
 It is hosted on Vercel, check it out at [https://event-discover.vercel.app](https://event-discover.vercel.app)
 
+## Prerequisite
+
+This project uses [pnpm](https://pnpm.io/installation#using-npm) as the package manager. You can install it globally using npm:
+
+```bash
+npm install -g pnpm
+```
+
+The project also includes a .tool-versions file for [asdf](https://asdf-vm.com/#/core-manage-asdf-vm) if that is preferred.
+
 ## Getting Started
 
 #### 1. Install dependencies
