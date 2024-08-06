@@ -23,6 +23,14 @@ function formatToISO(date?: Date, time?: "start" | "end"): string {
   return newDate.toISOString().replace(".000Z", "Z");
 }
 
+// Test if the date is valid and format it for the date picker
+function handleDefaultDate(startString: string, endString: string): DateRange | undefined {
+  const startDate = isFinite(+new Date(startString)) ? new Date(startString) : undefined;
+  const endDate = isFinite(+new Date(endString)) ? new Date(endString) : undefined;
+
+  return startDate ? { from: startDate, to: endDate } : undefined;
+}
+
 export default function SearchFilters() {
   const [searchParams, setSearchParams] = useSetParams();
   // Get the search params from the URL
@@ -36,10 +44,7 @@ export default function SearchFilters() {
     setSearchParams([{ name: SearchParams.City, value: e.target.value.trim() }]);
   });
 
-  // Format date from URL to DateRange for the date picker element
-  const defaultDate: DateRange | undefined = startDate
-    ? { from: new Date(startDate), to: endDate ? new Date(endDate) : undefined }
-    : undefined;
+  const defaultDateRange = handleDefaultDate(startDate ?? "", endDate ?? "");
 
   return (
     <Card className="p-0 border-0">
@@ -48,7 +53,7 @@ export default function SearchFilters() {
           <Label htmlFor="datePicker">Date Range</Label>
           <DatePickerWithRange
             id="datePicker"
-            defaultValue={defaultDate}
+            defaultValue={defaultDateRange}
             onChange={(date?: DateRange) => {
               setSearchParams([
                 { name: SearchParams.StartDate, value: formatToISO(date?.from, "start") },
