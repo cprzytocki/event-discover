@@ -37,7 +37,7 @@ export default function SearchFilters() {
   const startDate = searchParams.get(SearchParams.StartDate);
   const endDate = searchParams.get(SearchParams.EndDate);
   const city = searchParams.get(SearchParams.City) ?? "";
-  const layout = (searchParams.get(SearchParams.Layout) as Layout) ?? Layout.GRID;
+  const layout = searchParams.get(SearchParams.Layout) === Layout.LIST ? Layout.LIST : Layout.GRID;
 
   // Debounce city input to reduce api calls
   const handleCityChange = debounce((e: React.ChangeEvent<HTMLInputElement>) => {
